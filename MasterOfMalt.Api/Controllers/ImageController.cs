@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-using MasterOfMalt.Api.Services;
+﻿using MasterOfMalt.Api.Services;
 using MasterOfMalt.Domain.Exceptions;
 using MasterOfMalt.Repository;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using System.Linq;
+using System.Net;
 
 namespace MasterOfMalt.Api.Controllers
 {

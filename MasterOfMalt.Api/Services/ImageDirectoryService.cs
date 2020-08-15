@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace MasterOfMalt.Api.Services
 {
-    public class ImageDirectoryService : IImageDirectoryService
+    public class ImageDirectoryService : IImageDirectoryService, IImageDirectoryServiceInit
     {
         private readonly IFileService _fileService;
         private readonly IImagePropertiesProvider _imagePropertiesProvider;
@@ -23,8 +23,6 @@ namespace MasterOfMalt.Api.Services
             _imageRepositoryPath = configuration.GetValue<string>("ImageRepositoryPath");
             _fileService = fileService;
             _imagePropertiesProvider = imagePropertiesProvider;
-
-            Init();
         }
 
         public ImageDomainModel GetImageInfo(string name, int height, int width, string type, string backgroundColor, string watermark)
@@ -50,10 +48,10 @@ namespace MasterOfMalt.Api.Services
             return filteredImages.First();
         }
 
-        private void Init()
+        public void Init()
         {
             if (!_fileService.DoesRepositoryDirectoryExist(_imageRepositoryPath))
-                throw new ImageRepositoryNotFoundException($"Image repository Not found!");
+                throw new ImageRepositoryNotFoundException("Image repository Not found!");
 
             var getImagesQuery = new GetImagesQuery(_imageRepositoryPath, _fileService, _imagePropertiesProvider);
             _images = getImagesQuery.Execute();

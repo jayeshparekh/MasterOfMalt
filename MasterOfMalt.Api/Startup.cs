@@ -56,6 +56,9 @@ namespace MasterOfMalt.Api
 
                 await next();
             });
+
+            var imageDirectoryService = (IImageDirectoryServiceInit) app.ApplicationServices.GetService<IImageDirectoryService>();
+            imageDirectoryService.Init();
             
             app.UseAuthorization();
 
