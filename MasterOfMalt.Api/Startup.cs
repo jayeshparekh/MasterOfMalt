@@ -1,0 +1,75 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using MasterOfMalt.Api.Services;
+using MasterOfMalt.Repository;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Primitives;
+using Microsoft.Net.Http.Headers;
+
+namespace MasterOfMalt.Api
+{
+    public class Startup
+    {
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+
+        public IConfiguration Configuration { get; }
+
+        // This method gets called by the runtime. Use this method to add services to the container.
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddSingleton<IImagePropertiesProvider, ImagePropertiesProvider>();
+            services.AddSingleton<IFileService, FileService>();
+            services.AddSingleton<IImageDirectoryService, ImageDirectoryService>();
+
+            services.AddResponseCaching();
+            services.AddControllers();
+        }
+
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        {
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+
+            app.UseHttpsRedirection();
+
+            app.UseRouting();
+
+            app.UseResponseCaching();
+            app.Use(async (context, next) =>
+            {
+                context.Response.GetTypedHeaders().CacheControl = new CacheControlHeaderValue
+                {
+                    Public = true,
+                    MaxAge = TimeSpan.FromHours(6)
+                };
+
+                context.Response.Headers[HeaderNames.Vary] = new[] {"Accept-Encoding"};
+
+                await next();
+            });
+            
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
+        }
+    }
+}
