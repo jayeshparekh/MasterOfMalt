@@ -23,7 +23,7 @@ namespace MasterOfMalt.Repository
             var file = $"{_imageRepositoryPath}\\{_imageInfo.Name}.{_imageInfo.Type}";
 
             if (!_fileService.DoesFileExist(file))
-                throw new ImageNotFoundException(_imageInfo, $"Image {_imageInfo} not found in repository!");
+                throw new ImageNotFoundException(_imageInfo, $"Image {_imageInfo.Name} not found in repository!");
 
             var imageData = _fileService.ReadAllBytes(file);
 
