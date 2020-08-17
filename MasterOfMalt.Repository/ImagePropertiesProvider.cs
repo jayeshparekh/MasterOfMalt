@@ -16,7 +16,7 @@ namespace MasterOfMalt.Repository
             {
                 Height = image.Height,
                 Width = image.Width,
-                Name = fileInfo.Name.Substring(0, fileInfo.Name.IndexOf('.')),
+                Name = fileInfo.Name.Substring(0, fileInfo.Name.LastIndexOf('.')),
                 Type = fileInfo.Extension.Substring(1)
             };
 

@@ -1,4 +1,5 @@
-﻿using MasterOfMalt.Domain.Exceptions;
+﻿using System.Collections.Concurrent;
+using MasterOfMalt.Domain.Exceptions;
 using MasterOfMalt.Domain.Models;
 using MasterOfMalt.Repository;
 using Microsoft.Extensions.Configuration;
@@ -13,7 +14,7 @@ namespace MasterOfMalt.Api.Services
         private readonly IImagePropertiesProvider _imagePropertiesProvider;
         private readonly string _imageRepositoryPath;
         
-        private IEnumerable<ImageDomainModel> _images;
+        private ConcurrentBag<ImageDomainModel> _images;
 
         public ImageDirectoryService(
             IFileService fileService, 
@@ -54,7 +55,9 @@ namespace MasterOfMalt.Api.Services
                 throw new ImageRepositoryNotFoundException("Image repository Not found!");
 
             var getImagesQuery = new GetImagesQuery(_imageRepositoryPath, _fileService, _imagePropertiesProvider);
-            _images = getImagesQuery.Execute();
+            var result = getImagesQuery.Execute();
+
+            _images = new ConcurrentBag<ImageDomainModel>(result);
         }
     }
 }
