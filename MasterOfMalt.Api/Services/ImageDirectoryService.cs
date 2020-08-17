@@ -14,7 +14,7 @@ namespace MasterOfMalt.Api.Services
         private readonly IImagePropertiesProvider _imagePropertiesProvider;
         private readonly string _imageRepositoryPath;
         
-        private ConcurrentBag<ImageDomainModel> _images;
+        private ConcurrentBag<ImageDomainModel> _imageInfos;
 
         public ImageDirectoryService(
             IFileService fileService, 
@@ -28,7 +28,7 @@ namespace MasterOfMalt.Api.Services
 
         public ImageDomainModel GetImageInfo(string name, int height, int width, string type, string backgroundColor, string watermark)
         {
-            var filteredImages = _images
+            var filteredImages = _imageInfos
                 .Where(i => i.Name == name && i.Height == height && i.Width == width && i.Type == type);
 
             if (!string.IsNullOrEmpty(backgroundColor))
@@ -57,7 +57,7 @@ namespace MasterOfMalt.Api.Services
             var getImagesQuery = new GetImagesQuery(_imageRepositoryPath, _fileService, _imagePropertiesProvider);
             var result = getImagesQuery.Execute();
 
-            _images = new ConcurrentBag<ImageDomainModel>(result);
+            _imageInfos = new ConcurrentBag<ImageDomainModel>(result);
         }
     }
 }
