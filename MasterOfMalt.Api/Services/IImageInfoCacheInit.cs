@@ -1,6 +1,6 @@
 ﻿namespace MasterOfMalt.Api.Services
 {
-    public interface IImageDirectoryServiceInit
+    public interface IImageInfoCacheInit
     {
         void Init();
     }

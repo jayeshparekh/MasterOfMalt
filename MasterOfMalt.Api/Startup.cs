@@ -25,7 +25,7 @@ namespace MasterOfMalt.Api
         {
             services.AddSingleton<IImagePropertiesProvider, ImagePropertiesProvider>();
             services.AddSingleton<IFileService, FileService>();
-            services.AddSingleton<IImageDirectoryService, ImageDirectoryService>();
+            services.AddSingleton<IImageInfoCache, ImageInfoInMemoryCache>();
 
             services.AddResponseCaching();
             services.AddControllers();
@@ -57,7 +57,7 @@ namespace MasterOfMalt.Api
                 await next();
             });
 
-            var imageDirectoryService = (IImageDirectoryServiceInit) app.ApplicationServices.GetService<IImageDirectoryService>();
+            var imageDirectoryService = (IImageInfoCacheInit) app.ApplicationServices.GetService<IImageInfoCache>();
             imageDirectoryService.Init();
             
             app.UseAuthorization();

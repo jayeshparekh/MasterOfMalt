@@ -12,14 +12,14 @@ namespace MasterOfMalt.Api.Controllers
     [ApiController]
     public class ImageController : ControllerBase
     {
-        private readonly IImageDirectoryService _imageDirectoryService;
+        private readonly IImageInfoCache _imageInfoCache;
         private readonly IFileService _fileService;
         private readonly string _imageRepositoryPath;
 
-        public ImageController(IImageDirectoryService imageDirectoryService, IConfiguration configuration, IFileService fileService)
+        public ImageController(IImageInfoCache imageInfoCache, IConfiguration configuration, IFileService fileService)
         {
             _imageRepositoryPath = configuration.GetValue<string>("ImageRepositoryPath");
-            _imageDirectoryService = imageDirectoryService;
+            _imageInfoCache = imageInfoCache;
             _fileService = fileService;
         }
 
@@ -47,7 +47,7 @@ namespace MasterOfMalt.Api.Controllers
 
             try
             {
-                var imageInfo = _imageDirectoryService.GetImageInfo(name, height, width, type, background, watermark);
+                var imageInfo = _imageInfoCache.GetImageInfo(name, height, width, type, background, watermark);
 
                 if (imageInfo == null)
                     return NotFound();

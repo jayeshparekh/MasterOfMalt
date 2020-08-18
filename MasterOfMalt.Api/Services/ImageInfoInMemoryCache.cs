@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace MasterOfMalt.Api.Services
 {
-    public class ImageDirectoryService : IImageDirectoryService, IImageDirectoryServiceInit
+    public class ImageInfoInMemoryCache : IImageInfoCache, IImageInfoCacheInit
     {
         private readonly IFileService _fileService;
         private readonly IImagePropertiesProvider _imagePropertiesProvider;
@@ -16,7 +16,7 @@ namespace MasterOfMalt.Api.Services
         
         private ConcurrentBag<ImageDomainModel> _imageInfos;
 
-        public ImageDirectoryService(
+        public ImageInfoInMemoryCache(
             IFileService fileService, 
             IImagePropertiesProvider imagePropertiesProvider,
             IConfiguration configuration)
